@@ -135,6 +135,11 @@ class AnalysisPipelineTests(unittest.TestCase):
         self.assertIn("<svg", first)
         self.assertIn("甲总", first)
 
+    def test_demo_banner_is_rendered(self):
+        html = render(self.graph, demo=True)
+        self.assertIn("示例数据", html)
+        self.assertIn("全部为虚构人物", html)
+
     def test_person_page_generates(self):
         out = self.root / "people"
         run("network_person.py", "--graph", str(self.output / "graph.json"),

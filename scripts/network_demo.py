@@ -158,7 +158,7 @@ def main():
         "--rooms", str(base / "rooms.json"), "--labels", str(base / "labels.json"),
         "--output", str(network), "--me", "wxid_me", "--now", str(NOW))
     run("network_report.py", "--graph", str(network / "graph.json"),
-        "--output", str(reports / "dashboard.html"), "--title", "示例人脉地图")
+        "--output", str(reports / "dashboard.html"), "--title", "示例人脉地图", "--demo")
     weekly = run("network_weekly.py", "--graph", str(network / "graph.json"), "--limit", "5")
 
     print(json.dumps({

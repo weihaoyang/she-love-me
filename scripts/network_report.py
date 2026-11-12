@@ -419,6 +419,9 @@ footer{margin-top:70px;padding-top:20px;border-top:1px solid var(--line);font-si
 .rel p{margin:6px 0;font-size:13px}
 blockquote.q{margin:8px 0;padding:8px 12px;border-left:2px solid #c9b28e;background:#f7f3ea;font-size:12.5px;color:#5c554c}
 .ev{font-size:11.5px;color:var(--muted);margin:6px 0}
+.demo{margin:0 0 18px;padding:9px 12px;border:1px solid #e0c9b0;background:#fbf3e9;
+color:#8a6034;font-size:12.5px;border-radius:3px}
+.demo code{background:#f4e8d8;padding:1px 5px;border-radius:2px}
 .netmap{width:100%;height:auto;background:#fbfaf6;border:1px solid var(--line);border-radius:3px;margin:10px 0}
 .glabel{font-size:9.5px;fill:#4a453f}
 .glegend{font-size:9.5px;fill:#7b736a}
@@ -430,7 +433,7 @@ blockquote.q{margin:8px 0;padding:8px 12px;border-left:2px solid #c9b28e;backgro
 """
 
 
-def render(graph, title="人脉地图", analysis=None, intimacy=None, show_quotes=False):
+def render(graph, title="人脉地图", analysis=None, intimacy=None, show_quotes=False, demo=False):
     persons = [p for p in graph["persons"] if p.get("kind") == "person"]
     groups = graph.get("groups", [])
     stats = graph["stats"]
@@ -440,6 +443,9 @@ def render(graph, title="人脉地图", analysis=None, intimacy=None, show_quote
     analysis_html = render_analysis(analysis, quotes, show_quotes=show_quotes)
     intimacy_html = render_intimacy(intimacy)
     network_svg = network_viz.render_svg(graph)
+    demo_banner = ('<div class="demo">示例数据 · 全部为虚构人物，由 '
+                   '<code>network_demo.py</code> 生成，不代表任何真实用户。</div>'
+                   if demo else "")
     debt_html, debt_total = debt_rows(persons)
     dormant_html, dormant_total = dormant_rows(persons)
     bridges_html = bridge_rows(persons)
@@ -514,6 +520,7 @@ def render(graph, title="人脉地图", analysis=None, intimacy=None, show_quote
         "weekly_rows": weekly_rows(actions),
         "roster_rows": person_rows(persons),
         "analysis_html": analysis_html,
+        "demo_banner": demo_banner,
     }
 
     return f"""<!doctype html>
@@ -523,6 +530,7 @@ def render(graph, title="人脉地图", analysis=None, intimacy=None, show_quote
 <style>{CSS}</style></head><body><div class="wrap">
 
 <header>
+{context['demo_banner']}
 <div class="kicker">PERSONAL NETWORK DASHBOARD · {context['generated']}</div>
 <h1>{context['title']}</h1>
 <p class="sub">基于本机聊天记录的关系网络分析。数据窗口 {context['window']}，
@@ -606,6 +614,7 @@ def main():
     parser.add_argument("--analysis", help="可选：analysis.json，提供后生成证据版叙事")
     parser.add_argument("--intimacy", help="可选：intimacy.json；默认自动读取 graph 同目录")
     parser.add_argument("--show-quotes", action="store_true", help="报告中显示证据原文（默认隐藏）")
+    parser.add_argument("--demo", action="store_true", help="在报告顶部标注“示例数据”")
     args = parser.parse_args()
 
     graph = json.loads(Path(args.graph).read_text(encoding="utf-8"))
@@ -615,7 +624,7 @@ def main():
     intimacy_path = Path(args.intimacy) if args.intimacy else Path(args.graph).with_name("intimacy.json")
     intimacy = json.loads(intimacy_path.read_text(encoding="utf-8")) if intimacy_path.exists() else None
     rendered = render(graph, title=args.title, analysis=analysis,
-                      intimacy=intimacy, show_quotes=args.show_quotes)
+                      intimacy=intimacy, show_quotes=args.show_quotes, demo=args.demo)
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(rendered, encoding="utf-8")
