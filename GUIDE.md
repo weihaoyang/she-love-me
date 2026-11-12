@@ -28,6 +28,8 @@ Do not continue until your current workspace is the repository root.
 - `AGENTS.md`
 - `.agents/skills/she-love-me/SKILL.md`
 - `.claude/skills/she-love-me/SKILL.md`
+- `.agents/skills/renmai/SKILL.md`
+- `.claude/skills/renmai/SKILL.md`
 - `.claude/settings.json`
 
 If any of these files are missing, stop and report that the repository is incomplete.
@@ -48,6 +50,8 @@ python -m pip install -r requirements.txt
 > On macOS, use `python3` instead of `python`.
 
 6. For a new Windows WeChat user, follow the native skill's `weflow-cli` JSON path. Do not run `setup_check.py --ensure-decryptor`: the former default decryptor is unavailable due to DMCA. CipherTalk JSON is the fallback; old WeFlow JSON remains import-only.
+
+6b. If the user wants **network / social-capital analysis** instead of a two-person relationship analysis, follow `.agents/skills/renmai/SKILL.md`. It reuses the same normalized bundles in `data/contacts/` and runs `scripts/network_build.py` → `network_report.py` → `network_weekly.py`. Boundary: only the user's own network; no background checks, no third-party ranking, no chat content in reports.
 
 7. If initialization succeeds, handle session reload before invoking the native entry:
 

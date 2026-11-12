@@ -32,6 +32,27 @@
 
 > 已有聊天导出文件也能开始，无需重新提取微信数据库。语音仅在已有转写文本时参与分析；图片与表情目前以消息记录、资源整理为主。
 
+### 另一条线：人脉分析（renmai）
+
+同一套聊天数据，也可以不谈恋爱，谈**网络**。`renmai` 是仓库内的第二个 Agent Skill：
+
+- 把 `data/contacts/` 的 bundle 构建成人物关系图（共同群、桥接、结构洞）
+- 输出核心圈 / 关系债 / 沉睡资产 / 每周行动清单
+- **亲密关系是图里的一层**：先给候选信号，确认后再调用 `she-love-me` 引擎做单段深潜
+- 只分析**你自己的**关系网络，不做背景调查、不给第三方排名
+
+```bash
+python scripts/network_build.py --input data/contacts --output data/network
+python scripts/network_report.py --graph data/network/graph.json --output reports/network/dashboard.html
+python scripts/network_weekly.py --graph data/network/graph.json
+```
+
+详见 [docs/network/README.md](docs/network/README.md) 与 `.agents/skills/renmai/SKILL.md`。
+
+**数据与隐私**：`data/`、`reports/`、`vendor/`、`scripts/tmp/` 均在 `.gitignore` 内；仓库里的示例全部是虚构数据。
+发布前可运行 `python scripts/privacy_scan.py` 自检（手机号 / 身份证 / 真实 wxid / 消息 ID）。
+完整清单见 [PUBLISH_CHECKLIST.md](PUBLISH_CHECKLIST.md)。
+
 ---
 
 ## 当前能力

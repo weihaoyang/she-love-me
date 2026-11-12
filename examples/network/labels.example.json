@@ -1,0 +1,27 @@
+{
+  "wxid_example_founder": {
+    "tier": "A10",
+    "role": "某机器人公司 创始人 / CEO",
+    "next": "本周发一页纸，请他判断赛道，不要直接要钱"
+  },
+  "wxid_example_vc": {
+    "tier": "A10+",
+    "role": "某早期基金 创始合伙人",
+    "next": "下次见面带一页纸，结束语固定：还差什么、能否引荐一个人"
+  },
+  "wxid_example_gov": {
+    "tier": "机构",
+    "role": "某区经科局",
+    "next": "按政策清单准备材料，进入正式申报"
+  },
+  "wxid_example_prof": {
+    "tier": "学术",
+    "role": "某高校副教授（方向与项目直接相关）",
+    "next": "把技术叙事交给他看，争取联合课题"
+  },
+  "wxid_example_supplier": {
+    "tier": "产业",
+    "role": "某供应链公司 技术总监",
+    "next": "一个具体的适配问题，不要泛泛请教"
+  }
+}

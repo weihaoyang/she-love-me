@@ -1,0 +1,7 @@
+---
+description: Personal network analysis from local chat history
+globs:
+alwaysApply: true
+---
+
+When the user asks to analyze their network, social capital, who to maintain, or how to reach someone through an introduction, read and follow `.agents/skills/renmai/SKILL.md`. Build the graph with `python scripts/network_build.py`, render `python scripts/network_report.py`, and produce the weekly list with `python scripts/network_weekly.py`. Only analyze the user's own relationships: never run background checks, never rank third parties, never output chat contents.
