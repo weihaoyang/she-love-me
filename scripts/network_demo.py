@@ -31,12 +31,38 @@ PEOPLE = [
     ("wxid_demo_dormant", "旧友 F", 700, 160, ["生活"]),
     ("wxid_demo_debt", "客户 G", 300, 22, ["产业"]),
     ("wxid_demo_new", "新人 H", 6, 1, ["待定"]),
+    ("wxid_demo_lawyer", "律师 I", 40, 60, ["服务"]),
+    ("wxid_demo_doctor", "医生 J", 18, 120, ["服务"]),
+    ("wxid_demo_media", "记者 K", 25, 80, ["媒体"]),
+    ("wxid_demo_alumni", "校友 L", 210, 12, ["组织"]),
+    ("wxid_demo_intern", "实习生 M", 160, 3, ["组织"]),
+    ("wxid_demo_designer", "设计师 N", 95, 18, ["产业"]),
+    ("wxid_demo_ops", "运营 O", 320, 4, ["组织"]),
+    ("wxid_demo_pm", "产品 P", 280, 7, ["组织"]),
+    ("wxid_demo_dev", "研发 Q", 190, 9, ["组织"]),
+    ("wxid_demo_finance", "财务 R", 55, 45, ["服务"]),
+    ("wxid_demo_client2", "客户 S", 130, 30, ["产业"]),
+    ("wxid_demo_mentor", "导师 T", 75, 90, ["学术"]),
 ]
 
 GROUPS = {
-    "1001@chatroom": ("创业营", "wxid_demo_founder", ["wxid_demo_founder", "wxid_demo_vc", "wxid_demo_supplier"]),
-    "1002@chatroom": ("实验室", "wxid_demo_prof", ["wxid_demo_prof", "wxid_demo_peer"]),
-    "1003@chatroom": ("行业群", "wxid_demo_supplier", ["wxid_demo_supplier", "wxid_demo_debt", "wxid_demo_founder"]),
+    "1001@chatroom": ("创业营", "wxid_demo_founder",
+                      ["wxid_demo_founder", "wxid_demo_vc", "wxid_demo_supplier",
+                       "wxid_demo_alumni", "wxid_demo_ops"]),
+    "1002@chatroom": ("实验室", "wxid_demo_prof",
+                      ["wxid_demo_prof", "wxid_demo_peer", "wxid_demo_intern", "wxid_demo_mentor"]),
+    "1003@chatroom": ("行业群", "wxid_demo_supplier",
+                      ["wxid_demo_supplier", "wxid_demo_debt", "wxid_demo_founder",
+                       "wxid_demo_client2", "wxid_demo_designer"]),
+    "1004@chatroom": ("项目组", "wxid_demo_peer",
+                      ["wxid_demo_peer", "wxid_demo_pm", "wxid_demo_dev",
+                       "wxid_demo_ops", "wxid_demo_designer"]),
+    "1005@chatroom": ("校友会", "wxid_demo_alumni",
+                      ["wxid_demo_alumni", "wxid_demo_founder", "wxid_demo_media",
+                       "wxid_demo_mentor", "wxid_demo_vc"]),
+    "1006@chatroom": ("供应链", "wxid_demo_supplier",
+                      ["wxid_demo_supplier", "wxid_demo_finance", "wxid_demo_client2",
+                       "wxid_demo_lawyer"]),
 }
 
 
@@ -56,14 +82,17 @@ def write_bundle(root, username, display, total, days_ago, messages):
 
 def conversation(total, days_ago, last_theirs, seed):
     random.seed(seed)
-    start = NOW - days_ago * 86400 - total * 3600
+    span = 365 * 86400
+    end = NOW - days_ago * 86400
+    start = end - span
+    step = span / max(total, 1)
     messages = []
     for index in range(total):
         sender = "me" if index % 2 == 0 else "them"
-        stamp = start + index * 3600 + random.randint(0, 600)
+        stamp = int(start + index * step + random.randint(0, 600))
         messages.append({"sender": sender, "timestamp": stamp, "type": "text", "content": f"m{index}"})
     if last_theirs:
-        messages.append({"sender": "them", "timestamp": NOW - days_ago * 86400, "type": "text", "content": "在吗"})
+        messages.append({"sender": "them", "timestamp": end, "type": "text", "content": "在吗"})
     return messages
 
 
@@ -117,6 +146,11 @@ def main():
         "wxid_demo_prof": {"tier": "学术", "role": "高校副教授", "next": "把技术叙事交给他看"},
         "wxid_demo_supplier": {"tier": "产业", "role": "供应链技术负责人", "next": "一个具体的适配问题"},
         "wxid_demo_debt": {"tier": "产业", "role": "客户", "next": "回一条具体的话"},
+        "wxid_demo_lawyer": {"tier": "服务", "role": "执业律师", "next": "把合同模板过一遍"},
+        "wxid_demo_media": {"tier": "媒体", "role": "科技记者", "next": "给一个可报道的进展"},
+        "wxid_demo_alumni": {"tier": "组织", "role": "校友会理事", "next": "请他引荐一位校友"},
+        "wxid_demo_mentor": {"tier": "学术", "role": "产业导师", "next": "季度汇报一次"},
+        "wxid_demo_client2": {"tier": "产业", "role": "潜在客户", "next": "约一次场景演示"},
     }
     (base / "labels.json").write_text(json.dumps(labels, ensure_ascii=False), encoding="utf-8")
 

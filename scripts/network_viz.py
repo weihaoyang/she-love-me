@@ -71,8 +71,8 @@ def force_layout(nodes, edges, width=900, height=620, iterations=180, seed=7):
             limit = min(length, 22)
             positions[name][0] += dx / length * limit
             positions[name][1] += dy / length * limit
-            positions[name][0] = min(width - 30, max(30, positions[name][0]))
-            positions[name][1] = min(height - 30, max(24, positions[name][1]))
+            positions[name][0] = min(width - 70, max(70, positions[name][0]))
+            positions[name][1] = min(height - 40, max(40, positions[name][1]))
     return positions
 
 
